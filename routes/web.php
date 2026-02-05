@@ -24,7 +24,7 @@ Route::get('/search', function () {
     $categories = ChefkochAPI::get_categories();
 
     // Check if there are any validation errors flashed to the session
-    if(session()->has('errors')) {
+    if (session()->has('errors')) {
         $errors = session()->get('errors')->getBag('default');
         // Pass the errors to the view
         return view('filters', ["categories" => $categories, "errors" => $errors]);
@@ -41,7 +41,7 @@ Route::get('/result', function () {
     $rating = request()->input('rating');
 
     return view('recipes', ["min_kochzeit" => $min_kochzeit, "max_kochzeit" => $max_kochzeit, "zutaten" => $zutaten, "categories" => $categories, "rating" => $rating]);
-    
+
 })->name('result');
 
 Route::get('/concept', function () {
