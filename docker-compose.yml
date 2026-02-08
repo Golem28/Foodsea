@@ -4,10 +4,10 @@ services:
         container_name: mariadb
         restart: unless-stopped
         environment:
-            MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
+            MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
             MARIADB_DATABASE: ${DB_DATABASE}
             MARIADB_USER: ${DB_USERNAME}
-            MARIADB_PASSWORD: ${DB_ROOT_PASSWORD}
+            MARIADB_PASSWORD: ${DB_PASSWORD}
             TZ: UTC
         ports:
             - "3306:3306"
