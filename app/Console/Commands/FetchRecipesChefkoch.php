@@ -5,11 +5,9 @@ namespace App\Console\Commands;
 use App\Domain\Recipe\RecipeChefkochRepository;
 use App\Infrastructure\Http\RecipeChefkochRepositoryImplementation;
 use Illuminate\Console\Command;
-use App\Application\RecipeRepositoryImplemenation;
-use App\Models\Recipe;
 use Nette\NotImplementedException;
 
-class CrawlRecepies extends Command {
+class FetchRecipesChefkoch extends Command {
     /**
      * The name and signature of the console command.
      *
@@ -36,6 +34,11 @@ class CrawlRecepies extends Command {
      */
     public function handle() {
         $ids = $this->repository->getRecipeIds();
+
+        if ($ids->isSuccess() === false) {
+            $this->error("Failed to fetch recipe IDs: " . $ids->getError());
+            return;
+        }
 
         foreach ($ids->getData() as $id) {
             $recipeData = $this->repository->getRecipe($id);

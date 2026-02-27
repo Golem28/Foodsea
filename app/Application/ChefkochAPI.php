@@ -3,8 +3,6 @@
 namespace App\Application;
 
 use Exception;
-use TypeError;
-use InvalidArgumentException;
 
 use App\Domain\Recipe\RecipeChefkochRepository;
 use App\Infrastructure\Http\RecipeChefkochRepositoryImplementation;
@@ -13,7 +11,7 @@ class NoDataException extends Exception {
     // Custom exception logic
 }
 
-class ChefkochAPI {
+class FetchRecipesChefkoch {
     private RecipeChefkochRepository $chefkochRepository;
     private RecipeRepositoryImplemenation $recipeRepository;
 
