@@ -7,11 +7,7 @@ use Exception;
 use App\Domain\Recipe\RecipeChefkochRepository;
 use App\Infrastructure\Http\RecipeChefkochRepositoryImplementation;
 
-class NoDataException extends Exception {
-    // Custom exception logic
-}
-
-class FetchRecipesChefkoch {
+class ChefkochAPI {
     private RecipeChefkochRepository $chefkochRepository;
     private RecipeRepositoryImplemenation $recipeRepository;
 
