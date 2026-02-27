@@ -17,7 +17,7 @@ class RecipeChefkochRepositoryImplementation implements RecipeChefkochRepository
     }
 
     public function getRecipe(int $id): array {
-        $response = $this->client->get(self::ENDPOINT . '/recipes/' . $id);
+        $response = $this->client->get('/recipes/' . $id);
         return $response->getJson();
     }
 
@@ -101,11 +101,11 @@ class RecipeChefkochRepositoryImplementation implements RecipeChefkochRepository
         if ($userQuery) {
             $params['query'] = $userQuery;
         }
-        return $this->client->get(self::ENDPOINT . '/recipes', $params);
+        return $this->client->get('/recipes', $params);
     }
 
     public function getCategories() {
-        $response = $this->client->get(self::ENDPOINT . '/recipes/categories');
+        $response = $this->client->get('/recipes/categories');
         return $response->getJson();
     }
 }

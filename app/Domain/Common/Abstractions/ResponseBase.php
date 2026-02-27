@@ -9,7 +9,7 @@ abstract class ResponseBase implements Response {
 
     public function __construct(
         private $data,
-        private string $error,
+        private ?string $error,
     ) {
         $this->success = empty($error);
     }

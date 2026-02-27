@@ -13,7 +13,7 @@ class FetchRecipesChefkoch extends Command {
      *
      * @var string
      */
-    protected $signature = 'app:crawl-recepies';
+    protected $signature = 'app:fetch_recipes_chefkoch';
 
     /**
      * The console command description.
@@ -40,7 +40,10 @@ class FetchRecipesChefkoch extends Command {
             return;
         }
 
-        foreach ($ids->getData() as $id) {
+        $chefkochIds = $ids->getData();
+        print_r($chefkochIds);
+
+        foreach ($chefkochIds as $id) {
             $recipeData = $this->repository->getRecipe($id);
             throw new NotImplementedException("Implement the saving of the recipe data to the database");
         }
