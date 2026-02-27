@@ -1,13 +1,13 @@
 <?php
-namespace App\ChefkochAPI;
+
+namespace App\Application;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-require_once 'DBRecepeFetcher.php';
 use App\ChefkochAPI\DBRecepeFetcher;
 
-class FluentRecepeFilterer {
+class FluentRecipeFilterer {
     private $recipes;
     private $tags = [];
     private $ingredients = [];

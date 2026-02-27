@@ -4,18 +4,25 @@ namespace App\Domain\Recipe;
 
 use App\Domain\Recipe\Entity\{
     RecipeTagList,
-    IngredientList
+    IngredientList,
+    RecipeTag,
+    Ingredient,
 };
 use App\Domain\Recipe\ValueObject\{
     RecipeId,
     RecipeCategoryId,
     CookingTime,
     Difficulty,
-    Url
+    RecipeTagId,
+    IngredientId,
+    Url,
 };
 use DateTime;
 
 class Recipe {
+    private array $recipeTags;
+    private array $ingredients;
+
     public function __construct(
         private RecipeId $id,
         private RecipeCategoryId $categoryId,
@@ -28,8 +35,18 @@ class Recipe {
         private DateTime $createdAt,
         private Url $image,
         private Url $originUrl,
-        private RecipeTagList $recipeTags,
-        private IngredientList $ingredients
+        RecipeTagList $recipeTags,
+        IngredientList $ingredients
     ) {
+        $this->recipeTags = $recipeTags->getList();
+        $this->ingredients = $ingredients->getList();
+    }
+
+    public function addRecipeTag(string $name): void {
+        $this->recipeTags[] = new RecipeTag(RecipeTagId::generateUniqueId(), $name);
+    }
+
+    public function addIngredient(string $name): void {
+        $this->ingredients[] = new Ingredient(IngredientId::generateUniqueId(), $name);
     }
 }

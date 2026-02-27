@@ -7,7 +7,7 @@ use App\Domain\Recipe\ValueObject\IngredientId;
 class Ingredient {
     public function __construct(
         private IngredientId $id,
-        private string $title
+        private string $name
     ) {
     }
 }

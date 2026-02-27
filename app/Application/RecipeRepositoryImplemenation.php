@@ -1,53 +1,50 @@
 <?php
-namespace App\ChefkochAPI;
 
+namespace App\Application;
+
+use App\Domain\Recipe\RecipeChefkochRepository;
+use App\Infrastructure\Http\RecipeChefkochRepositoryImplementation;
 use App\Models\Recipe;
 use App\Models\Ingredient;
 use App\Models\NeedsIngredient;
 use App\Models\RecipeHasTag;
 use App\Models\Tag;
 
-require_once app_path() . '/chefkochapi/ChefkochAPI.php';
-require_once app_path() . '/chefkochapi/Crawler/HttpClient.php';
-use App\ChefkochAPI\Crawler\HttpClient;
+class RecipeRepositoryImplemenation {
+    private RecipeChefkochRepository $chefkochRepository;
 
-class DBRecepeFetcher{
-
-    public static function index()
-    {
-        return ChefkochAPI::get_crawler_for_categories();        
+    public function __construct() {
+        $this->chefkochRepository = new RecipeChefkochRepositoryImplementation();
     }
 
-    public static function get($id)
-    {
+    public function get($id) {
         if (Recipe::where('id', '=', $id)->doesntExist()) {
-            DBRecepeFetcher::make($id);
+            $this->make($id);
         }
 
-        $recipe = 
+        $recipe =
             Recipe::where('id', '=', $id)
-            ->first();
+                ->first();
 
         $ingredients =
             NeedsIngredient::where('recipe_id', '=', $id)
-            ->join('ingredient', 'ingredient.id', '=', 'needs_ingredient.ingredient_id')
-            ->select('ingredient.name as ingredient_name', 'ingredient.id as ingredient_id')
-            ->get();
+                ->join('ingredient', 'ingredient.id', '=', 'needs_ingredient.ingredient_id')
+                ->select('ingredient.name as ingredient_name', 'ingredient.id as ingredient_id')
+                ->get();
 
-        $tags = 
+        $tags =
             RecipeHasTag::where('recipe_id', '=', $id)
-            ->join('recipe_tag', 'recipe_tag.id', '=', 'recipe_has_tag.tag_id')
-            ->select('recipe_tag.tag as tag')
-            ->get();
-        
+                ->join('recipe_tag', 'recipe_tag.id', '=', 'recipe_has_tag.tag_id')
+                ->select('recipe_tag.tag as tag')
+                ->get();
+
         $recipe->ingredients = $ingredients;
         $recipe->tags = $tags;
 
         return $recipe;
     }
 
-    public static function makeMultiple($ids)
-    {
+    public function makeMultiple($ids) {
         // Test for ids not in the database with one query
         $alreadin_ids = Recipe::select('id')->whereIn('id', $ids)->get();
 
@@ -62,23 +59,18 @@ class DBRecepeFetcher{
         $max_load = 10;
 
         foreach ($ids as $id) {
-            DBRecepeFetcher::make($id);
+            $this->make($id);
             if (--$max_load <= 0) {
                 break;
             }
         }
     }
 
-    private static function load_recipe($id){
+    public function make($id) {
+        $recipe = $this->chefkochRepository->getRecipe($id);
 
-    }
-
-    public static function make($id)
-    {
-        $recipe = HttpClient::sendRequest(HttpClient::URL . $id); // Hier muss die API Abfrage rein
-        
         if (!isset($recipe->id)) {
-            print("Recipe not found " . $id . "<br/>");
+            print ("Recipe not found " . $id . "<br/>");
             return;
         }
 
@@ -119,10 +111,10 @@ class DBRecepeFetcher{
 
         // Fetch all ingredients to database
         foreach ($ingredients as $ingredient) {
-            Ingredient::firstOrCreate([   
+            Ingredient::firstOrCreate([
                 "id" => $ingredient->id,
                 "name" => $ingredient->name]);
-        
+
             NeedsIngredient::firstOrCreate([
                 "recipe_id" => $id,
                 "ingredient_id" => $ingredient->id]);

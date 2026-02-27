@@ -2,14 +2,14 @@
 
 namespace App\Console\Commands;
 
+use App\Domain\Recipe\RecipeChefkochRepository;
+use App\Infrastructure\Http\RecipeChefkochRepositoryImplementation;
 use Illuminate\Console\Command;
-
-require_once app_path() . '/chefkochapi/DBRecepeFetcher.php';
-use App\ChefkochAPI\DBRecepeFetcher;
+use App\Application\RecipeRepositoryImplemenation;
 use App\Models\Recipe;
+use Nette\NotImplementedException;
 
-class CrawlRecepies extends Command
-{
+class CrawlRecepies extends Command {
     /**
      * The name and signature of the console command.
      *
@@ -24,36 +24,22 @@ class CrawlRecepies extends Command
      */
     protected $description = 'Loads more commands from the chefkoch api';
 
+    protected RecipeChefkochRepository $repository;
+
+    public function __construct() {
+        parent::__construct();
+        $this->repository = new RecipeChefkochRepositoryImplementation();
+    }
+
     /**
      * Execute the console command.
      */
-    public function handle()
-    {
-        print("Letsgo \n");
-        $crawlers = DBRecepeFetcher::index();
-        $crawl_count = count($crawlers);
-        print("Crawl Count: " . $crawl_count . "\n");
+    public function handle() {
+        $ids = $this->repository->getRecipeIds();
 
-        $crawler = $crawlers[0];
-
-        foreach ($crawlers as $crawler) {
-            foreach ($crawler->getIds() as $id) {
-                /*if (isset($this->lastRecipeId)) {
-                    if ($id != $this->lastRecipeId) {
-                        continue;
-                    } else {
-                        print("Stop Skipping\n");
-                        unset($this->lastRecipeId);
-                    }
-                }*/
-    
-                if (Recipe::where('id', '=', $id)->exists()) {
-                    continue;
-                }
-                
-                print($crawl_count . ": " . $id . "\n");
-                DBRecepeFetcher::make($id);
-            }
+        foreach ($ids->getData() as $id) {
+            $recipeData = $this->repository->getRecipe($id);
+            throw new NotImplementedException("Implement the saving of the recipe data to the database");
         }
-    } 
+    }
 }

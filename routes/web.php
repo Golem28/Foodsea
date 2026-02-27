@@ -1,9 +1,7 @@
 <?php
 
-require_once app_path() . '/chefkochapi/ChefkochAPI.php';
-
 use Illuminate\Support\Facades\Route;
-use App\ChefkochAPI\ChefkochAPI;
+use App\Application\ChefkochAPI;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +19,7 @@ Route::get('/', function () {
 });
 
 Route::get('/search', function () {
-    $categories = ChefkochAPI::get_categories();
+    $categories = (new ChefkochAPI())->getCategories();
 
     // Check if there are any validation errors flashed to the session
     if (session()->has('errors')) {

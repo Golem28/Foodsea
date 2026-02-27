@@ -2,6 +2,7 @@
 
 namespace App\Domain\Recipe\ValueObject;
 
-class RecipeTagId {
+use App\Domain\Common\Abstractions\EntityId;
 
+class RecipeTagId extends EntityId {
 }

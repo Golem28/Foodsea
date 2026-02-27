@@ -2,6 +2,7 @@
 
 namespace App\Domain\Recipe\ValueObject;
 
-class RecipeCategoryId {
+use App\Domain\Common\Abstractions\EntityId;
 
+class RecipeCategoryId extends EntityId {
 }

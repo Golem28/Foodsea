@@ -2,8 +2,7 @@
 
 namespace App\Domain\Recipe\ValueObject;
 
-class RecipeId {
-    public function __construct(
-    ) {
-    }
+use App\Domain\Common\Abstractions\EntityId;
+
+class RecipeId extends EntityId {
 }
