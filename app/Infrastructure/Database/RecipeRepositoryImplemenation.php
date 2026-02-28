@@ -84,7 +84,7 @@ class RecipeRepositoryImplemenation implements RecipeRepository {
     }
 
     public function delete(RecipeId $id): bool {
-        RecipeModel::where('id', '=', $id)->delete();
+        RecipeModel::where('id', '=', $id->getValue())->delete();
         return true;
     }
 }
