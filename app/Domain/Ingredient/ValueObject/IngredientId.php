@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Recipe\ValueObject;
+namespace App\Domain\Ingredient\ValueObject;
 
 use App\Domain\Common\Abstractions\EntityId;
 

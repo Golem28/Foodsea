@@ -102,12 +102,6 @@ class FluentRecipeFilterer {
         }
     }
 
-    public function filter_ids($ids) {
-        DBRecepeFetcher::makeMultiple($ids);
-        $this->recipes->whereIn('recipe.id', $ids);
-        return $this;
-    }
-
     private function filter_for_ingredients() {
         if (count($this->ingredients) > 0) {
             $this->recipes->join('needs_ingredient', 'recipe.id', '=', 'needs_ingredient.recipe_id')

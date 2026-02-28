@@ -5,11 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tag extends Model
-{
+class RecipeTag extends Model {
     use HasFactory;
-
-    protected $table = 'recipe_tag';
 
     protected $fillable = [
         'id',
@@ -17,4 +14,13 @@ class Tag extends Model
         'updated_at',
         'created_at'
     ];
+
+    public function recipes() {
+        return $this->belongsToMany(
+            Recipe::class,
+            'recipe_tag_recipe',
+            'recipe_tag_id',
+            'recipe_id'
+        );
+    }
 }

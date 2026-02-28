@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\Recipe\Entity;
+namespace App\Domain\RecipeCategory\Entity;
 
-use App\Domain\Recipe\ValueObject\RecipeCategoryId;
+use App\Domain\RecipeCategory\ValueObject\RecipeCategoryId;
 
 class RecipeCategory {
     public function __construct(

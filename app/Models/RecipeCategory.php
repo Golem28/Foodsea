@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Ingredient extends AggregateBaseModel {
+class RecipeCategory extends AggregateBaseModel {
     use HasFactory;
 
     protected $fillable = [
@@ -18,8 +18,8 @@ class Ingredient extends AggregateBaseModel {
     public function recipe(): BelongsToMany {
         return $this->belongsToMany(
             Recipe::class,
-            'recipe_ingredient',
-            'ingredient_id',
+            'recipe_category_recipe',
+            'recipe_category_id',
             'recipe_id'
         );
     }

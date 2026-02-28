@@ -11,7 +11,8 @@ use App\Domain\Recipe\{
     Recipe,
     ValueObject\RecipeCategoryId,
     ValueObject\RecipeId,
-    ValueObject\CookingTime, ValueObject\Difficulty,
+    ValueObject\CookingTime,
+    ValueObject\Difficulty,
     ValueObject\Url,
     ValueObject\UserRating,
     ValueObject\IngredientId,
@@ -139,7 +140,21 @@ class RecipeRepositoryImplemenation implements RecipeRepository {
                 "siteUrl" => $recipe->getOriginUrl()
             ]);
 
-            foreach ($recipe->get)
+            foreach ($recipe->getIngredientIds() as $ingredientGroup) {
+                foreach ($ingredientGroup->getIngredients() as $ingredient) {
+                    IngredientModel::firstOrCreate([
+                        "id" => $ingredient->getId()->getValue(),
+                        "name" => $ingredient->getName()]);
+                }
+            }
+
+            foreach ($recipe->getTags() as $tag) {
+                $tagObj = Tag::firstOrCreate([
+                    "tag" => $tag]);
+                RecipeHasTag::firstOrCreate([
+                    "recipe_id" => $id,
+                    "tag_id" => $tagObj->id]);
+            }
         });
     }
 
