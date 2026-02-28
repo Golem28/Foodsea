@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Recipe extends AggregateBaseModel {
     use HasFactory;
@@ -44,21 +46,11 @@ class Recipe extends AggregateBaseModel {
         );
     }
 
-    public function tags(): BelongsToMany {
-        return $this->belongsToMany(
-            RecipeTag::class,
-            'recipe_tag_recipe',
-            'recipe_id',
-            'recipe_tag_id'
-        );
+    public function tags(): HasMany {
+        return $this->hasMany(RecipeTag::class, 'recipe_id');
     }
 
-    public function categories(): BelongsToMany {
-        return $this->belongsToMany(
-            RecipeCategory::class,
-            'recipe_category_recipe',
-            'recipe_id',
-            'recipe_category_id'
-        );
+    public function categories(): BelongsTo {
+        return $this->belongsTo(RecipeCategory::class);
     }
 }

@@ -4,14 +4,14 @@ namespace App\Domain\Recipe\ValueObject;
 
 use DateInterval;
 
-class CookingTime {
+readonly class CookingTime {
     public function __construct(
-        private readonly DateInterval $cookingTime,
-        private readonly DateInterval $restingTime,
+        private DateInterval $cookingTime,
+        private DateInterval $restingTime,
     ) {
     }
 
-    public function getCookingTime(): DateInterval {
+    public function getPreparationTime(): DateInterval {
         return $this->cookingTime;
     }
 

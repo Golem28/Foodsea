@@ -4,9 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Override;
 
 class RecipeTag extends Model {
     use HasFactory;
+
+    #[Override]
+    public $timestamps = false;
 
     protected $fillable = [
         'id',
@@ -15,12 +20,7 @@ class RecipeTag extends Model {
         'created_at'
     ];
 
-    public function recipes() {
-        return $this->belongsToMany(
-            Recipe::class,
-            'recipe_tag_recipe',
-            'recipe_tag_id',
-            'recipe_id'
-        );
+    public function recipes(): BelongsTo {
+        return $this->belongsTo(Recipe::class);
     }
 }

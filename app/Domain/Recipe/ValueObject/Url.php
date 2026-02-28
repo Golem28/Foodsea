@@ -2,7 +2,7 @@
 
 namespace App\Domain\Recipe\ValueObject;
 
-class Url {
+readonly class Url {
     public function __construct(
         private string $url
     ) {

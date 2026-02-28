@@ -2,7 +2,7 @@
 
 namespace App\Domain\Recipe\ValueObject;
 
-class UserRating {
+readonly class UserRating {
     public function __construct(
         float $averageRating,
         int $votesCount,

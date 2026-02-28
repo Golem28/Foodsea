@@ -2,9 +2,9 @@
 
 namespace App\Domain\Recipe\ValueObject;
 
-class Difficulty {
+readonly class Difficulty {
     public function __construct(
-        private readonly float $difficulty
+        public float $difficulty
     ) {
     }
 }

@@ -9,14 +9,10 @@ return new class extends Migration {
      * Run the migrations.
      */
     public function up(): void {
-        Schema::create('recipes', function (Blueprint $table) {
+        Schema::create('recipe_categories', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->string('type');
-            $table->string('title');
-            $table->string('subtitle');
-            $table->integer('preparation_time');
-            $table->integer('resting_time');
-            $table->string('category_id')->references('id')->on('recipe_categories')->constrained()->onDelete('cascade');
+            $table->string('name');
+            $table->string('parent_id')->nullable()->references('id')->on('recipe_categories')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -25,6 +21,6 @@ return new class extends Migration {
      * Reverse the migrations.
      */
     public function down(): void {
-        Schema::dropIfExists('recipes');
+        Schema::dropIfExists('recipe_categories');
     }
 };

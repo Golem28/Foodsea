@@ -2,7 +2,7 @@
 
 namespace App\Domain\Recipe\ValueObject;
 
-class ViewCount {
+readonly class ViewCount {
     public function __construct(
         private readonly int $viewCount,
     ) {

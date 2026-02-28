@@ -5,9 +5,9 @@ namespace App\Domain\Recipe\Entity;
 use App\Domain\Recipe\ValueObject\RecipeTagId;
 use stdClass;
 
-class RecipeTag {
+readonly class RecipeTag {
     public function __construct(
-        private string $name
+        public string $name
     ) {
     }
 }

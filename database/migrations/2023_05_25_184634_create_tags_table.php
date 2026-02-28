@@ -9,10 +9,10 @@ return new class extends Migration {
      * Run the migrations.
      */
     public function up(): void {
-        Schema::create('recipe_tag', function (Blueprint $table) {
+        Schema::create('recipe_tags', function (Blueprint $table) {
             $table->id();
+            $table->string('recipe_id')->references('id')->on('recipes')->constrained()->onDelete('cascade');
             $table->string('tag');
-            $table->timestamps();
         });
     }
 
