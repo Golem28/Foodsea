@@ -11,4 +11,8 @@ class RecipeTag {
         private string $name
     ) {
     }
+
+    public function getId(): RecipeTagId {
+        return $this->id;
+    }
 }

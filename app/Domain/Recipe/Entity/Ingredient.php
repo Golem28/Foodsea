@@ -10,4 +10,8 @@ class Ingredient {
         private string $name
     ) {
     }
+
+    public function getId(): IngredientId {
+        return $this->id;
+    }
 }

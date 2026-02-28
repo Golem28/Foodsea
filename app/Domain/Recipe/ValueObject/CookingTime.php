@@ -11,6 +11,14 @@ class CookingTime {
     ) {
     }
 
+    public function getCookingTime(): DateInterval {
+        return $this->cookingTime;
+    }
+
+    public function getRestingTime(): DateInterval {
+        return $this->restingTime;
+    }
+
     public function getTotalTime(): DateInterval {
         return $this->cookingTime + $this->restingTime;
     }

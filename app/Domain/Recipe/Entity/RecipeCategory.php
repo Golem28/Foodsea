@@ -8,6 +8,5 @@ class RecipeCategory {
     public function __construct(
         private RecipeCategoryId $id,
     ) {
-
     }
 }

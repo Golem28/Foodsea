@@ -16,12 +16,14 @@ use App\Domain\Recipe\ValueObject\{
     RecipeTagId,
     IngredientId,
     Url,
+    UserRating,
 };
+use DateInterval;
 use DateTime;
 
 class Recipe {
-    private array $recipeTags;
-    private array $ingredients;
+    private array $recipeTags = [];
+    private array $ingredients = [];
 
     public function __construct(
         private RecipeId $id,
@@ -31,22 +33,74 @@ class Recipe {
         private UserRating $rating,
         private CookingTime $cookingTime,
         private Difficulty $difficulty,
-        private DateTime $updatedAt,
-        private DateTime $createdAt,
         private Url $image,
         private Url $originUrl,
-        RecipeTagList $recipeTags,
-        IngredientList $ingredients
+        private DateTime $updatedAt,
+        private DateTime $createdAt,
     ) {
-        $this->recipeTags = $recipeTags->getList();
-        $this->ingredients = $ingredients->getList();
     }
 
-    public function addRecipeTag(string $name): void {
-        $this->recipeTags[] = new RecipeTag(RecipeTagId::generateUniqueId(), $name);
+    public function addRecipeTag(RecipeTagId $id, string $name): void {
+        $this->recipeTags[] = new RecipeTag($id, $name);
     }
 
-    public function addIngredient(string $name): void {
-        $this->ingredients[] = new Ingredient(IngredientId::generateUniqueId(), $name);
+    public function addIngredient(IngredientId $id, string $name): void {
+        $this->ingredients[] = new Ingredient($id, $name);
+    }
+
+    public function getId(): RecipeId {
+        return $this->id;
+    }
+
+    public function getCategoryId(): RecipeCategoryId {
+        return $this->categoryId;
+    }
+
+    public function getTitle(): string {
+        return $this->title;
+    }
+
+    public function getSubtitle(): string {
+        return $this->subtitle;
+    }
+
+    public function getRating(): UserRating {
+        return $this->rating;
+    }
+
+    public function getCookingTime(): DateInterval {
+        return $this->cookingTime->getCookingTime();
+    }
+
+    public function getRestingTime(): DateInterval {
+        return $this->cookingTime->getRestingTime();
+    }
+
+    public function getDifficulty(): Difficulty {
+        return $this->difficulty;
+    }
+
+    public function getImage(): Url {
+        return $this->image;
+    }
+
+    public function getOriginUrl(): Url {
+        return $this->originUrl;
+    }
+
+    public function getUpdatedAt(): DateTime {
+        return $this->updatedAt;
+    }
+
+    public function getCreatedAt(): DateTime {
+        return $this->createdAt;
+    }
+
+    public function getRecipeTagIds(): array {
+        return array_map(fn(RecipeTag $tag) => $tag->getId(), $this->recipeTags);
+    }
+
+    public function getIngredientIds(): array {
+        return array_map(fn(Ingredient $ingredient) => $ingredient->getId(), $this->ingredients);
     }
 }
