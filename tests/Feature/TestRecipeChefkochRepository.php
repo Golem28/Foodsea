@@ -13,7 +13,7 @@ class TestRecipeChefkochRepository extends TestCase {
     /**
      * Test if recipe ids can be fetched from the repository
      */
-    /*public function test_getRecipeIds(): void {
+    public function test_getRecipeIds(): void {
         $repository = new ChefkochRepositoryImplementation();
 
         $ids = $repository->getRecipeIds();
@@ -25,7 +25,7 @@ class TestRecipeChefkochRepository extends TestCase {
 
         $this->assertTrue($ids->isSuccess(), $error);
         $this->assertCount(1000, $ids->getData());
-    }*/
+    }
 
     public function test_getRecipe(): void {
         $repository = new ChefkochRepositoryImplementation();
@@ -33,6 +33,5 @@ class TestRecipeChefkochRepository extends TestCase {
         $recipeResponse = $repository->getRecipe(4404251764679628);
 
         $this->assertTrue($recipeResponse->isSuccess());
-        var_dump($recipeResponse->getData());
     }
 }

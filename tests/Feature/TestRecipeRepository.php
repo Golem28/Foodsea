@@ -37,8 +37,8 @@ class TestRecipeRepository extends TestCase {
             'Test Recipe',
             'Test Subtitle',
             new CookingTime(
-                new DateInterval('PT30M'),
-                new DateInterval('PT45M')
+                30,
+                45
             ),
             $now,
             $now
