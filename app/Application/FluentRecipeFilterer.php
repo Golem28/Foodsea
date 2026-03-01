@@ -5,8 +5,6 @@ namespace App\Application;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-use App\ChefkochAPI\DBRecepeFetcher;
-
 class FluentRecipeFilterer {
     private $recipes;
     private $tags = [];

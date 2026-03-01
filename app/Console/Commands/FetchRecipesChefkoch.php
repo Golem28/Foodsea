@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Domain\Recipe\RecipeChefkochRepository;
-use App\Infrastructure\Http\RecipeChefkochRepositoryImplementation;
+use App\Infrastructure\Http\ChefkochRepositoryImplementation;
 use Illuminate\Console\Command;
 use Nette\NotImplementedException;
 
@@ -26,7 +26,7 @@ class FetchRecipesChefkoch extends Command {
 
     public function __construct() {
         parent::__construct();
-        $this->repository = new RecipeChefkochRepositoryImplementation();
+        $this->repository = new ChefkochRepositoryImplementation();
     }
 
     /**

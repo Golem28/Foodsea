@@ -3,12 +3,13 @@
 namespace App\Infrastructure\Database;
 
 use App\Domain\Common\Abstractions\EntityId;
+use App\Domain\RecipeCategory\RecipeCategoryRepository;
 use Illuminate\Support\Facades\DB;
 use App\Domain\RecipeCategory\ValueObject\RecipeCategoryId;
 use App\Domain\RecipeCategory\RecipeCategory;
 use App\Models\RecipeCategory as RecipeCategoryModel;
 
-class RecipeCategoryRepositoryImplementation {
+class RecipeCategoryRepositoryImplementation implements RecipeCategoryRepository {
     public function load(RecipeCategoryId $id): RecipeCategory {
         $recipeCategoryData = RecipeCategoryModel::find($id);
         $parentId = $recipeCategoryData->parent_id ?

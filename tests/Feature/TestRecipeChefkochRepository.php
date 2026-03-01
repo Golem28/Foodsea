@@ -4,19 +4,23 @@ namespace Tests\Feature;
 
 use App\Domain\Recipe\RecipeChefkochRepository;
 use App\Infrastructure\Http\ChefkochRepositoryImplementation;
-use App\Models\Recipe;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 
 #[CoversClass(RecipeChefkochRepository::class)]
 class TestRecipeChefkochRepository extends TestCase {
+    private RecipeChefkochRepository $repository;
+
+    public function setUp(): void {
+        parent::setUp();
+        $this->repository = app(RecipeChefkochRepository::class);
+    }
+
     /**
      * Test if recipe ids can be fetched from the repository
      */
     public function test_getRecipeIds(): void {
-        $repository = new ChefkochRepositoryImplementation();
-
-        $ids = $repository->getRecipeIds();
+        $ids = $this->repository->getRecipeIds();
 
         $error = "Unknown";
         if (!$ids->isSuccess()) {
@@ -28,9 +32,7 @@ class TestRecipeChefkochRepository extends TestCase {
     }
 
     public function test_getRecipe(): void {
-        $repository = new ChefkochRepositoryImplementation();
-
-        $recipeResponse = $repository->getRecipe(4404251764679628);
+        $recipeResponse = $this->repository->getRecipe(4404251764679628);
 
         $this->assertTrue($recipeResponse->isSuccess());
     }

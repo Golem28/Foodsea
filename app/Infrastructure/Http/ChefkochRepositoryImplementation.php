@@ -10,7 +10,6 @@ use App\Domain\Recipe\{
     Responses\FetchRecipeResponse, ValueObject\CookingTime, ValueObject\RecipeId,
 };
 use App\Domain\RecipeCategory\ValueObject\RecipeCategoryId;
-use DateInterval;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
