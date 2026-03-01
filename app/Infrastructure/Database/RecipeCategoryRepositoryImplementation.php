@@ -10,21 +10,14 @@ use App\Domain\RecipeCategory\RecipeCategory;
 use App\Models\RecipeCategory as RecipeCategoryModel;
 
 class RecipeCategoryRepositoryImplementation implements RecipeCategoryRepository {
+    public function loadAll(): array {
+        $recipeCategoriesData = RecipeCategoryModel::all();
+        return $recipeCategoriesData->map(fn($data) => $this->mapDataToDomainModel($data))->toArray();
+    }
+
     public function load(RecipeCategoryId $id): RecipeCategory {
         $recipeCategoryData = RecipeCategoryModel::find($id);
-        $parentId = $recipeCategoryData->parent_id ?
-            new RecipeCategoryId($recipeCategoryData->parent_id) :
-            null;
-
-        $recipe = new RecipeCategory(
-            new RecipeCategoryId($recipeCategoryData->id),
-            $recipeCategoryData->name,
-            $parentId,
-            $recipeCategoryData->updated_at,
-            $recipeCategoryData->created_at
-        );
-
-        return $recipe;
+        return $this->mapDataToDomainModel($recipeCategoryData);
     }
 
     public function save(RecipeCategory $recipeCategory): bool {
@@ -53,5 +46,21 @@ class RecipeCategoryRepositoryImplementation implements RecipeCategoryRepository
     public function delete(RecipeCategoryId $id): bool {
         RecipeCategoryModel::where('id', '=', $id->getValue())->delete();
         return true;
+    }
+
+    private function mapDataToDomainModel(\App\Models\RecipeCategory $recipeCategoryData): RecipeCategory {
+        $parentId = $recipeCategoryData->parent_id ?
+            new RecipeCategoryId($recipeCategoryData->parent_id) :
+            null;
+
+        $recipeCategory = new RecipeCategory(
+            new RecipeCategoryId($recipeCategoryData->id),
+            $recipeCategoryData->name,
+            $parentId,
+            $recipeCategoryData->updated_at,
+            $recipeCategoryData->created_at
+        );
+
+        return $recipeCategory;
     }
 }

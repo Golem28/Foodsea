@@ -1,5 +1,6 @@
 <?php
 
+use App\Application\Queries\GetAllRecipeCategoriesQuery;
 use Illuminate\Support\Facades\Route;
 use App\Application\ChefkochAPI;
 
@@ -18,8 +19,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/search', function () {
-    $categories = (new ChefkochAPI())->getCategories();
+Route::get('/search', function (GetAllRecipeCategoriesQuery $query) {
+    $categories = $query->execute('');
 
     // Check if there are any validation errors flashed to the session
     if (session()->has('errors')) {

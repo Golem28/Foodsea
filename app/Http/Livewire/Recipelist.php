@@ -1,15 +1,11 @@
 <?php
 namespace App\Http\Livewire;
 
+use App\Application\Queries\SearchRecipesQuery;
+use App\Domain\Recipe\ValueObject\RecipeFilter;
 use Livewire\Component;
-use InvalidArgumentException;
 
-require_once app_path().'/chefkochapi/ChefkochAPI.php';
-use App\ChefkochAPI\ChefkochAPI;
-use App\ChefkochAPI\NoDataException;
-
-class Recipelist extends Component
-{
+class Recipelist extends Component {
     public $categories;
     public $min_kochzeit;
     public $max_kochzeit;
@@ -17,27 +13,36 @@ class Recipelist extends Component
     public $error;
     public $printed = "";
 
-    public $recepies = array();
+    public $recepies = [];
     public $isLoading = true;
 
-    public function render()
-    {
+    public function __construct(
+        $id = null,
+    ) {
+        parent::__construct($id);
+    }
+
+    public function render() {
         return view('livewire.recipelist');
     }
 
-    public function getRecepies(){
-        if (!isset($this->zutaten)) {
-            $this->zutaten = array();
+    public function getRecepies() {
+        $searchRecipesQuery = app(SearchRecipesQuery::class);
+        $recipeFilter = new RecipeFilter(
+            [],
+            $this->zutaten ?? [],
+            "",
+            $this->max_kochzeit,
+            $this->min_kochzeit
+        );
+        $recipes = $searchRecipesQuery->execute($recipeFilter);
+
+        if (empty($recipes)) {
+            $this->error = "No recipes were found";
+        } else {
+            $this->recepies = $recipes;
         }
 
-        try {
-            $this->recepies = ChefkochAPI::get_recipies($this->categories, $this->min_kochzeit, $this->max_kochzeit, $this->zutaten); 
-        } catch (InvalidArgumentException $e) { 
-            $this->error = $e->getMessage();
-        } catch (NoDataException $e){
-            $this->error = $e->getMessage();
-        }
-
-        $this->isLoading = false;   
+        $this->isLoading = false;
     }
 }

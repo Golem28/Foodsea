@@ -88,9 +88,9 @@ class RecipeRepositoryImplemenation implements RecipeRepository {
         }
 
         if ($filter->maxTotalTime)
-            $query->where('totalTime', '<=', $filter->maxTotalTime);
+            $query->whereRaw('preparation_time + resting_time <= ?', [$filter->maxTotalTime]);
         if ($filter->minTotalTime)
-            $query->where('totalTime', '>=', $filter->minTotalTime);
+            $query->whereRaw('preparation_time + resting_time >= ?', [$filter->minTotalTime]);
 
         // Eager load everything
         $recipesData = $query->with(['ingredients', 'tags'])->take(100)->get();

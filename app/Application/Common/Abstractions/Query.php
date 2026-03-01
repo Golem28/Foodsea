@@ -3,5 +3,5 @@
 namespace App\Application\Common\Abstractions;
 
 interface Query {
-    public function execute();
+    public function execute(mixed $request): mixed;
 }
