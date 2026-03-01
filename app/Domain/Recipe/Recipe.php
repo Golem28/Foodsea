@@ -4,16 +4,10 @@ namespace App\Domain\Recipe;
 
 use App\Domain\RecipeCategory\ValueObject\RecipeCategoryId;
 use App\Domain\Ingredient\ValueObject\IngredientId;
-use App\Domain\Recipe\Entity\{
-    RecipeTag,
-    Ingredient,
-};
 use App\Domain\Recipe\ValueObject\{
     RecipeId,
     CookingTime,
-    Difficulty,
-    Url,
-    UserRating,
+    RecipeTag,
 };
 use DateInterval;
 use DateTimeImmutable;

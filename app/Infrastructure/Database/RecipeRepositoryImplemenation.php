@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Database;
 
+use DateInterval;
 use Illuminate\Support\Facades\DB;
 use App\Domain\RecipeCategory\ValueObject\RecipeCategoryId;
 use App\Domain\Ingredient\ValueObject\IngredientId;
@@ -22,8 +23,8 @@ class RecipeRepositoryImplemenation implements RecipeRepository {
             $recipeData->title,
             $recipeData->subtitle,
             new CookingTime(
-                $recipeData->preparation_time,
-                $recipeData->resting_time
+                new DateInterval($recipeData->preparation_time),
+                new DateInterval($recipeData->resting_time)
             ),
             $recipeData->updated_at,
             $recipeData->created_at
@@ -52,8 +53,8 @@ class RecipeRepositoryImplemenation implements RecipeRepository {
                     'category_id' => $recipe->categoryId->getValue(),
                     'title' => $recipe->title,
                     'subtitle' => $recipe->subtitle,
-                    'preparation_time' => $recipe->getPreparationTime(),
-                    'resting_time' => $recipe->getRestingTime(),
+                    'preparation_time' => $recipe->getPreparationTime()->format('P%yY%mM%dDT%hH%iM%sS'),
+                    'resting_time' => $recipe->getRestingTime()->format('P%yY%mM%dDT%hH%iM%sS'),
                     'updated_at' => $recipe->updatedAt,
                 ]
             );
@@ -67,7 +68,7 @@ class RecipeRepositoryImplemenation implements RecipeRepository {
 
             // Sync Tags
             $newTags = array_map(
-                fn($tag) => $tag->tag,
+                fn($tag) => $tag->name,
                 $recipe->getRecipeTags()
             );
             $recipeData->tags()->whereNotIn('tag', $newTags)->delete();

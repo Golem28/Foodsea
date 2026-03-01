@@ -9,9 +9,9 @@ return new class extends Migration {
      * Run the migrations.
      */
     public function up(): void {
-        Schema::create('favourite', function (Blueprint $table) {
-            $table->foreignId('user_id')->references('id')->on('users')->constrained()->onDelete('cascade');
-            $table->foreignId('recipe_id')->references('id')->on('recipe')->constrained()->onDelete('cascade');
+        Schema::create('user_favourite_recipe', function (Blueprint $table) {
+            $table->string('user_id')->references('id')->on('users')->constrained()->onDelete('cascade');
+            $table->string('recipe_id')->references('id')->on('recipe')->constrained()->onDelete('cascade');
 
             $keys = array('user_id', 'recipe_id');
             $table->primary($keys);
@@ -22,6 +22,6 @@ return new class extends Migration {
      * Reverse the migrations.
      */
     public function down(): void {
-        Schema::dropIfExists('favourite');
+        Schema::dropIfExists('user_favourite_recipe');
     }
 };

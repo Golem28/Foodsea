@@ -1,9 +1,6 @@
 <?php
 
-namespace App\Domain\Recipe\Entity;
-
-use App\Domain\Recipe\ValueObject\RecipeTagId;
-use stdClass;
+namespace App\Domain\Recipe\ValueObject;
 
 readonly class RecipeTag {
     public function __construct(

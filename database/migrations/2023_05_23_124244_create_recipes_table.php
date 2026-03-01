@@ -11,11 +11,10 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('recipes', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->string('type');
             $table->string('title');
             $table->string('subtitle');
-            $table->integer('preparation_time');
-            $table->integer('resting_time');
+            $table->string('preparation_time');
+            $table->string('resting_time');
             $table->string('category_id')->references('id')->on('recipe_categories')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

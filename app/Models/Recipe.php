@@ -12,20 +12,18 @@ class Recipe extends AggregateBaseModel {
 
     protected $fillable = [
         'id',
-        'type',
+        'category_id',
         'title',
         'subtitle',
-        'rating',
-        'numVotes',
-        'difficulty',
-        'viewCount',
-        'cookingTime',
-        'restingTime',
-        'totalTime',
-        'previewImageUrlTemplate',
-        'siteUrl',
+        'preparation_time',
+        'resting_time',
         'updated_at',
         'created_at'
+    ];
+
+    protected $casts = [
+        'updated_at' => 'immutable_datetime',
+        'created_at' => 'immutable_datetime'
     ];
 
     public function favouriteByUsers(): BelongsToMany {
