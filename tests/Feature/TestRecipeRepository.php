@@ -10,17 +10,17 @@ use App\Domain\RecipeCategory\ValueObject\RecipeCategoryId;
 use App\Infrastructure\Database\RecipeRepositoryImplemenation;
 use DateInterval;
 use DateTimeImmutable;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Metadata\CoversFunction;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 
-class TestRecipeRepositoryImplemenation extends TestCase {
+#[CoversClass(RecipeRepository::class)]
+class TestRecipeRepository extends TestCase {
     /**
      * Test if a recipe can be saved and loaded again
      */
-    #[CoversFunction('save')]
-    #[CoversFunction('load')]
-    public function test_example(): void {
+    #[Test]
+    public function test_save_and_load_recipe(): void {
         $repository = new RecipeRepositoryImplemenation();
 
         $now = new DateTimeImmutable();

@@ -10,21 +10,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Recipe extends AggregateBaseModel {
     use HasFactory;
 
-    protected $fillable = [
-        'id',
-        'category_id',
-        'title',
-        'subtitle',
-        'preparation_time',
-        'resting_time',
-        'updated_at',
-        'created_at'
-    ];
+    public function __construct(array $attributes = []) {
+        $this->fillable = array_merge(
+            parent::getFillable(),
+            [
+                'category_id',
+                'title',
+                'subtitle',
+                'preparation_time',
+                'resting_time',
+            ]
+        );
 
-    protected $casts = [
-        'updated_at' => 'immutable_datetime',
-        'created_at' => 'immutable_datetime'
-    ];
+        parent::__construct($attributes);
+    }
 
     public function favouriteByUsers(): BelongsToMany {
         return $this->belongsToMany(

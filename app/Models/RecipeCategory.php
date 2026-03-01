@@ -8,12 +8,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class RecipeCategory extends AggregateBaseModel {
     use HasFactory;
 
-    protected $fillable = [
-        'id',
-        'name',
-        'updated_at',
-        'created_at'
-    ];
+    public function __construct(array $attributes = []) {
+        $this->fillable = array_merge(
+            parent::getFillable(),
+            [
+                'name',
+                'parent_id',
+            ]
+        );
+
+        parent::__construct($attributes);
+    }
 
     public function recipe(): HasMany {
         return $this->hasMany(Recipe::class, 'category_id');

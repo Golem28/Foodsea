@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Database;
 
+use App\Domain\Common\Abstractions\EntityId;
 use Illuminate\Support\Facades\DB;
 use App\Domain\RecipeCategory\ValueObject\RecipeCategoryId;
 use App\Domain\RecipeCategory\RecipeCategory;
@@ -10,10 +11,16 @@ use App\Models\RecipeCategory as RecipeCategoryModel;
 class RecipeCategoryRepositoryImplementation {
     public function load(RecipeCategoryId $id): RecipeCategory {
         $recipeCategoryData = RecipeCategoryModel::find($id);
+        $parentId = $recipeCategoryData->parent_id ?
+            new RecipeCategoryId($recipeCategoryData->parent_id) :
+            null;
+
         $recipe = new RecipeCategory(
             new RecipeCategoryId($recipeCategoryData->id),
-            $recipeCategoryData->title,
-            new RecipeCategoryId($recipeCategoryData->parent_id)
+            $recipeCategoryData->name,
+            $parentId,
+            $recipeCategoryData->updated_at,
+            $recipeCategoryData->created_at
         );
 
         return $recipe;
@@ -21,13 +28,20 @@ class RecipeCategoryRepositoryImplementation {
 
     public function save(RecipeCategory $recipeCategory): bool {
         DB::transaction(function () use ($recipeCategory) {
+            $parentId = $recipeCategory->parentId;
+            if ($parentId instanceof EntityId) {
+                $parentId = $parentId->getValue();
+            }
+
             $recipeData = RecipeCategoryModel::updateOrCreate(
                 [
                     'id' => $recipeCategory->id->getValue()
                 ],
                 [
                     'name' => $recipeCategory->title,
-                    'parent_id' => $recipeCategory->parentId->getValue()
+                    'parent_id' => $parentId,
+                    'updated_at' => $recipeCategory->updatedAt,
+                    'created_at' => $recipeCategory->createdAt
                 ]
             );
         });
