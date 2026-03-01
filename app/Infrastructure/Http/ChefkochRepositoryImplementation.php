@@ -3,12 +3,18 @@
 namespace App\Infrastructure\Http;
 
 use App\Domain\Common\Responses\FetchIdResponse;
+use App\Domain\Ingredient\ValueObject\IngredientId;
 use App\Domain\Recipe\{
+    Recipe,
     RecipeChefkochRepository,
+    Responses\FetchRecipeResponse, ValueObject\CookingTime, ValueObject\RecipeId,
 };
+use App\Domain\RecipeCategory\ValueObject\RecipeCategoryId;
+use DateInterval;
+use DateTimeImmutable;
 use InvalidArgumentException;
 
-class RecipeChefkochRepositoryImplementation implements RecipeChefkochRepository {
+class ChefkochRepositoryImplementation implements RecipeChefkochRepository {
     private const ENDPOINT = 'https://api.chefkoch.de/v2';
     private RestClient $client;
 
@@ -16,9 +22,36 @@ class RecipeChefkochRepositoryImplementation implements RecipeChefkochRepository
         $this->client = new RestClient(self::ENDPOINT);
     }
 
-    public function getRecipe(int $id): array {
-        $response = $this->client->get('/recipes/' . $id);
-        return $response->getJson();
+    public function getRecipe(int $id): FetchRecipeResponse {
+        try {
+            $response = $this->client->get('/recipes/' . $id);
+        } catch (RestError $e) {
+            return new FetchRecipeResponse($e->getErrorMessage());
+        }
+
+        $recipeData = $response->getJson();
+        $recipe = new Recipe(
+            new RecipeId("chefkoch" . $recipeData['id']),
+            new RecipeCategoryId("chefkoch" . $recipeData['categoryIds'][0]),
+            $recipeData['title'],
+            $recipeData['subtitle'],
+            new CookingTime(
+                $recipeData['cookingTime'],
+                $recipeData['restingTime']
+            ),
+            new DateTimeImmutable(),
+            new DateTimeImmutable()
+        );
+
+        foreach ($recipeData['tags'] as $tag) {
+            $recipe->addRecipeTag($tag);
+        }
+
+        foreach ($recipeData['ingredientGroups'][0]['ingredients'] as $ingredient) {
+            $recipe->addIngredient(new IngredientId("chefkoch" . $ingredient['id']));
+        }
+
+        return new FetchRecipeResponse(null, $recipe);
     }
 
     public function searchRecipeIds(string $userQuery): FetchIdResponse {

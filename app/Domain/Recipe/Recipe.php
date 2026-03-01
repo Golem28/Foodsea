@@ -51,11 +51,11 @@ class Recipe {
         return $this->id;
     }
 
-    public function getPreparationTime(): DateInterval {
+    public function getPreparationTime(): int {
         return $this->cookingTime->getPreparationTime();
     }
 
-    public function getRestingTime(): DateInterval {
+    public function getRestingTime(): int {
         return $this->cookingTime->getRestingTime();
     }
 
