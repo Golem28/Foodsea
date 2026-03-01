@@ -10,8 +10,8 @@ return new class extends Migration {
      */
     public function up(): void {
         Schema::create('recipe_ingredient', function (Blueprint $table) {
-            $table->string('ingredient_id')->references('id')->on('ingredients')->constrained()->onDelete('cascade');
-            $table->string('recipe_id')->references('id')->on('recipes')->constrained()->onDelete('cascade');
+            $table->uuid('ingredient_id')->references('id')->on('ingredients')->constrained()->onDelete('cascade');
+            $table->uuid('recipe_id')->references('id')->on('recipes')->constrained()->onDelete('cascade');
 
             $table->primary(['ingredient_id', 'recipe_id']);
         });

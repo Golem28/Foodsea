@@ -10,8 +10,8 @@ return new class extends Migration {
      */
     public function up(): void {
         Schema::create('user_favourite_recipe', function (Blueprint $table) {
-            $table->string('user_id')->references('id')->on('users')->constrained()->onDelete('cascade');
-            $table->string('recipe_id')->references('id')->on('recipe')->constrained()->onDelete('cascade');
+            $table->uuid('user_id')->references('id')->on('users')->constrained()->onDelete('cascade');
+            $table->uuid('recipe_id')->references('id')->on('recipe')->constrained()->onDelete('cascade');
 
             $keys = array('user_id', 'recipe_id');
             $table->primary($keys);
