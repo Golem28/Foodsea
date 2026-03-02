@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Ingredient\Entity;
+namespace App\Domain\Ingredient;
 
 use App\Domain\Ingredient\ValueObject\IngredientId;
 
