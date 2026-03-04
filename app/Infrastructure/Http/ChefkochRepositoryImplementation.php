@@ -39,7 +39,6 @@ class ChefkochRepositoryImplementation implements ChefkochRecipeRepository, Chef
         try {
             $recipe = new Recipe(
                 new RecipeId("chefkoch" . $recipeData['id']),
-                new RecipeCategoryId("chefkoch" . $recipeData['categoryIds'][0]),
                 $recipeData['title'],
                 $recipeData['subtitle'],
                 new CookingTime(
@@ -56,6 +55,10 @@ class ChefkochRepositoryImplementation implements ChefkochRecipeRepository, Chef
 
             foreach ($recipeData['ingredientGroups'][0]['ingredients'] as $ingredient) {
                 $recipe->addIngredient(new IngredientId("chefkoch" . $ingredient['id']));
+            }
+
+            foreach ($recipeData['categoryIds'] as $category) {
+                $recipe->addCategory(new RecipeCategoryId("chefkoch" . $category));
             }
 
             return new FetchRecipeResponse(null, $recipe);

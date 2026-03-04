@@ -40,7 +40,7 @@ class FetchRecipesChefkoch extends Command {
      * Execute the console command.
      */
     public function handle() {
-        $this->syncRecipeCategories();
+        $this->syncRecipes();
     }
 
     public function syncRecipeCategories() {
@@ -66,7 +66,6 @@ class FetchRecipesChefkoch extends Command {
         }
 
         $chefkochIds = $responseRecipeIds->getData();
-        print_r($chefkochIds);
 
         foreach ($chefkochIds as $id) {
             $recipeData = $this->recipeChefkochRepository->getRecipe($id);

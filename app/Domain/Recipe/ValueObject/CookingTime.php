@@ -9,9 +9,6 @@ readonly class CookingTime {
         private int $preparationTime,
         private int $restingTime,
     ) {
-        if ($preparationTime < 5) {
-            throw new DomainValidationError("Cooking time should be at least 5 minutes to be valid.");
-        }
     }
 
     public function getPreparationTime(): int {

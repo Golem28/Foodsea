@@ -45,6 +45,13 @@ class RecipeRepositoryImplemenation implements RecipeRepository {
             );
             $recipeData->ingredients()->sync($ingredientIds);
 
+            // Sync categories
+            $categoryIds = array_map(
+                fn($id) => $id->getValue(),
+                $recipe->getCategoryIds()
+            );
+            $recipeData->categories()->sync($categoryIds);
+
             // Sync Tags
             $newTags = array_map(
                 fn($tag) => $tag->name,
@@ -100,7 +107,6 @@ class RecipeRepositoryImplemenation implements RecipeRepository {
     private function mapDataToDomainModel(\App\Models\Recipe $recipeData): Recipe {
         $recipe = new Recipe(
             new RecipeId($recipeData->id),
-            new RecipeCategoryId($recipeData->category_id),
             $recipeData->title,
             $recipeData->subtitle,
             new CookingTime(
@@ -111,12 +117,16 @@ class RecipeRepositoryImplemenation implements RecipeRepository {
             $recipeData->created_at
         );
 
-        foreach ($recipeData->ingredients as $ingredient) {
+        foreach ($recipeData->ingredients() as $ingredient) {
             $recipe->addIngredient(new IngredientId($ingredient->id));
         }
 
-        foreach ($recipeData->tags as $tag) {
+        foreach ($recipeData->tags() as $tag) {
             $recipe->addRecipeTag($tag->tag);
+        }
+
+        foreach ($recipeData->categories() as $category) {
+            $recipe->addCategory(new RecipeCategoryId($category->id));
         }
 
         return $recipe;

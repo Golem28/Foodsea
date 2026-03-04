@@ -21,10 +21,10 @@ class Recipe {
     public private(set) DateTimeImmutable $createdAt;
     private array $recipeTags = [];
     private array $ingredients = [];
+    private array $categories = [];
 
     public function __construct(
         RecipeId $id,
-        RecipeCategoryId $categoryId,
         string $title,
         string $subtitle,
         private CookingTime $cookingTime,
@@ -32,7 +32,6 @@ class Recipe {
         DateTimeImmutable $createdAt,
     ) {
         $this->id = $id;
-        $this->categoryId = $categoryId;
         $this->title = $title;
         $this->subtitle = $subtitle;
         $this->updatedAt = $updatedAt;
@@ -41,6 +40,10 @@ class Recipe {
 
     public function addRecipeTag(string $name): void {
         $this->recipeTags[] = new RecipeTag($name);
+    }
+
+    public function addCategory(RecipeCategoryId $id): void {
+        $this->categories[] = $id;
     }
 
     public function addIngredient(IngredientId $id): void {
@@ -61,6 +64,10 @@ class Recipe {
 
     public function getRecipeTags(): array {
         return $this->recipeTags;
+    }
+
+    public function getCategoryIds(): array {
+        return $this->categories;
     }
 
     public function getIngredientIds(): array {

@@ -15,7 +15,6 @@ return new class extends Migration {
             $table->string('subtitle');
             $table->string('preparation_time');
             $table->string('resting_time');
-            $table->string('category_id')->references('id')->on('recipe_categories')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -47,7 +47,12 @@ class Recipe extends AggregateBaseModel {
         return $this->hasMany(RecipeTag::class, 'recipe_id');
     }
 
-    public function categories(): BelongsTo {
-        return $this->belongsTo(RecipeCategory::class);
+    public function categories(): BelongsToMany {
+        return $this->belongsToMany(
+            Recipe::class,
+            'recipe_categories_recipe',
+            'recipe_category_id',
+            'recipe_id'
+        );
     }
 }
