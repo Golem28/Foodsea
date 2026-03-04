@@ -5,7 +5,7 @@ namespace App\Domain\Recipe;
 use App\Domain\Common\Responses\FetchIdResponse;
 use App\Domain\Recipe\Responses\FetchRecipeResponse;
 
-interface RecipeChefkochRepository {
+interface ChefkochRecipeRepository {
     public function getRecipe(
         int $id,
     ): FetchRecipeResponse;

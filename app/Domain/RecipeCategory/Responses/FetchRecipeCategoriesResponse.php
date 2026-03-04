@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Domain\Recipe\Responses;
+namespace App\Domain\RecipeCategory\Responses;
 
 use App\Domain\Common\Abstractions\ResponseBase;
-use App\Domain\Recipe\Recipe;
+use App\Domain\RecipeCategory\RecipeCategory;
 
-class FetchRecipeResponse extends ResponseBase {
+class FetchRecipeCategoriesResponse extends ResponseBase {
     public function __construct(
         private string|null $error = null,
-        ?Recipe $data = null,
+        RecipeCategory ...$data,
     ) {
+
         parent::__construct($data, $error);
     }
 
-    public function getData(): Recipe {
+    public function getData(): array {
         return parent::getData();
     }
 }

@@ -2,8 +2,7 @@
 
 namespace App\Domain\Recipe\ValueObject;
 
-use DateInterval;
-use Nette\Schema\ValidationException;
+use App\Domain\Common\Exceptions\DomainValidationError;
 
 readonly class CookingTime {
     public function __construct(
@@ -11,7 +10,7 @@ readonly class CookingTime {
         private int $restingTime,
     ) {
         if ($preparationTime < 5) {
-            throw new ValidationException("Cooking time should be at least 5 minutes to be valid.");
+            throw new DomainValidationError("Cooking time should be at least 5 minutes to be valid.");
         }
     }
 

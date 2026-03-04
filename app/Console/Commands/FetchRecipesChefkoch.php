@@ -2,10 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Domain\Recipe\RecipeChefkochRepository;
-use App\Infrastructure\Http\ChefkochRepositoryImplementation;
+use App\Domain\Recipe\ChefkochRecipeRepository;
+use App\Domain\Recipe\RecipeRepository;
+use App\Domain\RecipeCategory\ChefkochRecipeCategoryRepository;
+use App\Domain\RecipeCategory\RecipeCategoryRepository;
 use Illuminate\Console\Command;
-use Nette\NotImplementedException;
 
 class FetchRecipesChefkoch extends Command {
     /**
@@ -22,30 +23,59 @@ class FetchRecipesChefkoch extends Command {
      */
     protected $description = 'Loads more commands from the chefkoch api';
 
-    protected RecipeChefkochRepository $repository;
+    protected ChefkochRecipeRepository $recipeChefkochRepository;
+    protected ChefkochRecipeCategoryRepository $categoryChefkochRepository;
+    protected RecipeRepository $recipeRepository;
+    protected RecipeCategoryRepository $recipeCategoryRepository;
 
     public function __construct() {
         parent::__construct();
-        $this->repository = new ChefkochRepositoryImplementation();
+        $this->recipeChefkochRepository = app(ChefkochRecipeRepository::class);
+        $this->categoryChefkochRepository = app(ChefkochRecipeCategoryRepository::class);
+        $this->recipeRepository = app(RecipeRepository::class);
+        $this->recipeCategoryRepository = app(RecipeCategoryRepository::class);
     }
 
     /**
      * Execute the console command.
      */
     public function handle() {
-        $ids = $this->repository->getRecipeIds();
+        $this->syncRecipeCategories();
+    }
 
-        if ($ids->isSuccess() === false) {
-            $this->error("Failed to fetch recipe IDs: " . $ids->getError());
+    public function syncRecipeCategories() {
+        $categories = $this->categoryChefkochRepository->getCategories();
+
+        if ($categories->isSuccess() === false) {
+            $this->error("Failed to fetch recipe IDs: " . $categories->getError());
             return;
         }
 
-        $chefkochIds = $ids->getData();
+        foreach ($categories->getData() as $category) {
+            var_dump("Save category", $category);
+            $this->recipeCategoryRepository->save($category);
+        }
+    }
+
+    public function syncRecipes() {
+        $responseRecipeIds = $this->recipeChefkochRepository->getRecipeIds();
+
+        if ($responseRecipeIds->isSuccess() === false) {
+            $this->error("Failed to fetch recipe IDs: " . $responseRecipeIds->getError());
+            return;
+        }
+
+        $chefkochIds = $responseRecipeIds->getData();
         print_r($chefkochIds);
 
         foreach ($chefkochIds as $id) {
-            $recipeData = $this->repository->getRecipe($id);
-            throw new NotImplementedException("Implement the saving of the recipe data to the database");
+            $recipeData = $this->recipeChefkochRepository->getRecipe($id);
+            if (!$recipeData->isSuccess()) {
+                echo $recipeData->getError() . "\n";
+                continue;
+            }
+
+            $recipe = $recipeData->getData();
         }
     }
 }

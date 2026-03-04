@@ -2,18 +2,18 @@
 
 namespace Tests\Feature;
 
-use App\Domain\Recipe\RecipeChefkochRepository;
+use App\Domain\Recipe\ChefkochRecipeRepository;
 use App\Infrastructure\Http\ChefkochRepositoryImplementation;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 
-#[CoversClass(RecipeChefkochRepository::class)]
+#[CoversClass(ChefkochRecipeRepository::class)]
 class TestRecipeChefkochRepository extends TestCase {
-    private RecipeChefkochRepository $repository;
+    private ChefkochRecipeRepository $repository;
 
     public function setUp(): void {
         parent::setUp();
-        $this->repository = app(RecipeChefkochRepository::class);
+        $this->repository = app(ChefkochRecipeRepository::class);
     }
 
     /**
