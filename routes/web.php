@@ -23,7 +23,7 @@ Route::get('/', function () {
 });
 
 Route::get('/search', function (GetAllRecipeCategoriesQuery $query) {
-    $categories = $query->execute('');
+    $categories = $query->execute(null);
 
     // Check if there are any validation errors flashed to the session
     if (session()->has('errors')) {
@@ -36,16 +36,18 @@ Route::get('/search', function (GetAllRecipeCategoriesQuery $query) {
 })->name('search');
 
 Route::get('/result', action: function () {
-    $minTotalTime = request()->integer('minTotalTime');
-    $maxTotalTime = request()->integer('maxTotalTime');
-    $ingredients = request()->input('ingredients', []);
-    $categories = request()->input('categories', []);
-    $rating = request()->float('rating');
-    $recipes = app(SearchRecipesQuery::class)->execute(new RecipeFilter(
+    // TODO $categories = request()->input('categories', []);
+    // TODO $rating = request()->float('rating');
+
+    $filter = new RecipeFilter(
         [],
-        $ingredients,
-        null,
-    ));
+        $ingredients = request()->input('ingredients', []),
+        request()->string('title'),
+        request()->integer('maxTimeTotal'),
+        request()->integer('minTimeTotal')
+    );
+
+    $recipes = app(SearchRecipesQuery::class)->execute($filter);
 
     $viewRecipe = [];
     foreach ($recipes as $recipe) {

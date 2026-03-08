@@ -1,56 +1,61 @@
 @extends('layouts/app')
 
 @section('title')
-Filtering
+  Filtering
 @endsection
 
 @section('content')
   @component('components/card')
-    <form action="{{ route('result') }}" method="GET">
-      @component('components/doubleslider', 
-      ['title' => 'Kochzeit',
-      'name' => 'Kochzeit (in Minuten)', 
-      'minimum' => 0, 
-      'maximum' => 120, 
-      'min_name' => 'min_kochzeit', 
-      'max_name' => 'max_kochzeit'])
-      @endcomponent
+  <form action="{{ route('result') }}" method="GET">
+    <label for="title">Rezepttitel</label>
+    <input type="text" id="title" name="title" value="" placeholder="Rezepttitel suchen">
 
-      <!-- Ratingslider from Bootstrap Starting at 0 -->
-      <h3>Bewertung</h3>
-      <div class="form-group">
-        <input type="range" class="form-control-range" id="rating" name="rating" min="0" max="5" step="0.1" value="0">
-      </div>
+    @component('components/doubleslider',
+      [
+        'title' => 'Kochzeit',
+        'name' => 'Kochzeit (in Minuten)',
+        'minimum' => 0,
+        'maximum' => 120,
+        'min_name' => 'minTimeTotal',
+        'max_name' => 'maxTimeTotal'
+    ])
+    @endcomponent
 
-      <!-- Show the rating value -->
-      <div class="form-group">
-        <label for="rating">Mindestens: <span id="rating-value">0</span></label>
-      </div>
+    <!-- Ratingslider from Bootstrap Starting at 0 -->
+    <h3>Bewertung</h3>
+    <div class="form-group">
+      <input type="range" class="form-control-range" id="rating" name="rating" min="0" max="5" step="0.1" value="0">
+    </div>
 
-      <!-- Script to show the rating value -->
-      <script>
-        var slider = document.getElementById("rating");
-        var output = document.getElementById("rating-value");
-        output.innerHTML = slider.value;
+    <!-- Show the rating value -->
+    <div class="form-group">
+      <label for="rating">Mindestens: <span id="rating-value">0</span></label>
+    </div>
 
-        slider.oninput = function() {
-          output.innerHTML = this.value;
-        }
-      </script>
+    <!-- Script to show the rating value -->
+    <script>
+      var slider = document.getElementById("rating");
+      var output = document.getElementById("rating-value");
+      output.innerHTML = slider.value;
 
-      @component('components/list', [
-          'title' => 'Zutaten',
-          'item' => 'zutaten',
-          'input_name' => 'Zutat'
-      ])
-      @endcomponent
+      slider.oninput = function () {
+        output.innerHTML = this.value;
+      }
+    </script>
 
-      @component('components/category', 
-      ['categories' => $categories])
-      @endcomponent
+    @component('components/list', [
+      'title' => 'Zutaten',
+      'item' => 'ingredients',
+      'input_name' => 'ingredient'
+    ])
+    @endcomponent
 
-      <button type="submit" class="btn btn-primary">Suchen</button>
-    </form>
+    @component('components/category',
+    ['categories' => $categories])
+    @endcomponent
+
+    <button type="submit" class="btn btn-primary">Suchen</button>
+  </form>
   @endcomponent
 @endsection
 

@@ -75,7 +75,6 @@ class RecipeRepositoryImplemenation implements RecipeRepository {
     public function search(RecipeFilter $filter): array {
         $query = RecipeModel::query();
 
-        /*
         if ($filter->name) {
             $query->where('title', 'like', "%{$filter->name}%");
         }
@@ -96,7 +95,6 @@ class RecipeRepositoryImplemenation implements RecipeRepository {
             $query->whereRaw('preparation_time + resting_time <= ?', [$filter->maxTotalTime]);
         if ($filter->minTotalTime)
             $query->whereRaw('preparation_time + resting_time >= ?', [$filter->minTotalTime]);
-        */
 
         // Eager load everything
         $recipesData = $query->with(['ingredients', 'tags'])->get();
