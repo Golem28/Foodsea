@@ -1,11 +1,12 @@
 @extends('layouts/app')
 
 @section('title')
-Recipes
+    Recipes
 @endsection
 
 @section('content')
-<div class="container">
-    @livewire('recipelist', ['min_kochzeit' => $min_kochzeit, 'max_kochzeit' => $max_kochzeit, 'zutaten' => $zutaten, 'categories' => $categories, 'rating' => $rating])
-</div>
+    <div class="container">
+        @component('components/recipelist', ['recipes' => $recipes])
+        @endcomponent
+    </div>
 @endsection

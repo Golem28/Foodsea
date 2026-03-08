@@ -40,6 +40,7 @@ class FetchRecipesChefkoch extends Command {
      * Execute the console command.
      */
     public function handle() {
+        $this->syncRecipeCategories();
         $this->syncRecipes();
     }
 
@@ -52,7 +53,6 @@ class FetchRecipesChefkoch extends Command {
         }
 
         foreach ($categories->getData() as $category) {
-            var_dump("Save category", $category);
             $this->recipeCategoryRepository->save($category);
         }
     }
@@ -75,6 +75,7 @@ class FetchRecipesChefkoch extends Command {
             }
 
             $recipe = $recipeData->getData();
+            $this->recipeRepository->save($recipe);
         }
     }
 }

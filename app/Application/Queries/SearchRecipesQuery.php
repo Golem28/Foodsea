@@ -14,6 +14,12 @@ class SearchRecipesQuery extends Query {
     ) {
     }
 
+    /**
+     * Searches recipes and returns fitting results
+     * 
+     * @param RecipeFilter $request Filters to search recipes
+     * @return Recipe[] List of recipes
+     */
     public function execute(RecipeFilter $request): array {
         return $this->repository->search($request);
     }

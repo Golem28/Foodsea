@@ -1,6 +1,9 @@
 <?php
 
 use App\Application\Queries\GetAllRecipeCategoriesQuery;
+use App\Application\Queries\GetRecipeQuery;
+use App\Application\Queries\SearchRecipesQuery;
+use App\Domain\Recipe\ValueObject\RecipeFilter;
 use Illuminate\Support\Facades\Route;
 use App\Application\ChefkochAPI;
 
@@ -32,15 +35,30 @@ Route::get('/search', function (GetAllRecipeCategoriesQuery $query) {
     return view('filters', ["categories" => $categories]);
 })->name('search');
 
-Route::get('/result', function () {
-    $min_kochzeit = request()->input('min_kochzeit');
-    $max_kochzeit = request()->input('max_kochzeit');
-    $zutaten = request()->input('zutaten');
-    $categories = request()->input('categories');
-    $rating = request()->input('rating');
+Route::get('/result', action: function () {
+    $minTotalTime = request()->integer('minTotalTime');
+    $maxTotalTime = request()->integer('maxTotalTime');
+    $ingredients = request()->input('ingredients', []);
+    $categories = request()->input('categories', []);
+    $rating = request()->float('rating');
+    $recipes = app(SearchRecipesQuery::class)->execute(new RecipeFilter(
+        [],
+        $ingredients,
+        null,
+    ));
 
-    return view('recipes', ["min_kochzeit" => $min_kochzeit, "max_kochzeit" => $max_kochzeit, "zutaten" => $zutaten, "categories" => $categories, "rating" => $rating]);
+    $viewRecipe = [];
+    foreach ($recipes as $recipe) {
+        $viewRecipe[] = (object) [
+            'id' => $recipe->id->getValue(),
+            'originUrl' => 'laravel.com',
+            'imageUrl' => 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fthumbs.dreamstime.com%2Fz%2Fhealthy-eating-plate-vector-illustration-labeled-educational-food-example-scheme-vegetables-whole-grains-fruit-protein-as-185358717.jpg&f=1&nofb=1&ipt=6d8ae872e424a59e8292d13ad7e621cf17ae0822eb8b0ebff528b1b21b179cde',
+            'title' => $recipe->title,
+            'isFavourite' => false,
+        ];
+    }
 
+    return view('recipes', ['recipes' => $viewRecipe]);
 })->name('result');
 
 Route::get('/concept', function () {

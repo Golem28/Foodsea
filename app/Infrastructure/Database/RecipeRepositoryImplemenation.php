@@ -27,7 +27,6 @@ class RecipeRepositoryImplemenation implements RecipeRepository {
                     'id' => $recipe->id->getValue()
                 ],
                 [
-                    'category_id' => $recipe->categoryId->getValue(),
                     'title' => $recipe->title,
                     'subtitle' => $recipe->subtitle,
                     'preparation_time' => $recipe->getPreparationTime(),
@@ -76,6 +75,7 @@ class RecipeRepositoryImplemenation implements RecipeRepository {
     public function search(RecipeFilter $filter): array {
         $query = RecipeModel::query();
 
+        /*
         if ($filter->name) {
             $query->where('title', 'like', "%{$filter->name}%");
         }
@@ -96,9 +96,10 @@ class RecipeRepositoryImplemenation implements RecipeRepository {
             $query->whereRaw('preparation_time + resting_time <= ?', [$filter->maxTotalTime]);
         if ($filter->minTotalTime)
             $query->whereRaw('preparation_time + resting_time >= ?', [$filter->minTotalTime]);
+        */
 
         // Eager load everything
-        $recipesData = $query->with(['ingredients', 'tags'])->take(100)->get();
+        $recipesData = $query->with(['ingredients', 'tags'])->get();
         return $recipesData->map(fn($data) => $this->mapDataToDomainModel($data))->toArray();
     }
 
@@ -115,15 +116,15 @@ class RecipeRepositoryImplemenation implements RecipeRepository {
             $recipeData->created_at
         );
 
-        foreach ($recipeData->ingredients() as $ingredient) {
+        foreach ($recipeData->ingredients as $ingredient) {
             $recipe->addIngredient(new IngredientId($ingredient->id));
         }
 
-        foreach ($recipeData->tags() as $tag) {
+        foreach ($recipeData->tags as $tag) {
             $recipe->addRecipeTag($tag->tag);
         }
 
-        foreach ($recipeData->categories() as $category) {
+        foreach ($recipeData->categories as $category) {
             $recipe->addCategory(new RecipeCategoryId($category->id));
         }
 
